@@ -2,7 +2,6 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib #Only for parse.unquote and parse.unquote_plus.
 import json
 import base64
-from typing import Union, Optional
 import re
 # If you need to add anything above here you should check with course staff first.
 
@@ -19,7 +18,7 @@ Server documentation
 * GET / returns an html file.
 """
 
-def server(method: str, url: str, body: Optional[str], headers: dict[str, str]) -> tuple[Union[str, bytes], int, dict[str, str]]:    
+def server(method, url, body, headers):    
     global id
     # Parse URL -- this is probably the best way to do it. Delete if you want.
     parameters = None
@@ -155,7 +154,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 
 def run():
-    PORT = 4131
+    PORT = 80
     print(f"Starting server http://localhost:{PORT}/")
     server = ("", PORT)
     httpd = HTTPServer(server, RequestHandler)
