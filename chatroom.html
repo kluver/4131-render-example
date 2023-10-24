@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chatroom</title>
+    <script>
+        window.addEventListener("load", ()=>{
+            const messageInput = document.getElementById("message")
+            const colorInput = document.getElementById("color")
+            const submitButton = document.getElementById("submit")
+            const messageDiv = document.getElementById("messages")
+
+            async function update() {
+                const result = await fetch("/api/chats")
+                const messages = await result.json()
+                // step 1: let's nuke the div.
+                messageDiv.innerHTML = "";
+                //step 2: re-render. (this is not a good solution)
+                for (const message of messages) {
+                    const new_div = document.createElement("div")
+                    
+                    // add the color
+                    new_div.style.color = message.color;
+                    
+                    // add the delete button
+                    const new_delete = document.createElement("button")
+                    new_delete.appendChild(document.createTextNode("x"))
+                    // make it delete on delete.
+                    new_delete.addEventListener("click", async ()=>{
+                        // do the delete.
+                        const result = await fetch("/api/chats", {
+                            method: "DELETE",
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(message)
+                        })
+                    })
+                    new_div.appendChild(new_delete)
+                    
+                    // add the message
+                    new_div.appendChild(document.createTextNode(message.message))
+
+                    // add the div
+                    messageDiv.appendChild(new_div)
+                }
+            }
+            setInterval(update, 1000);
+
+            submitButton.addEventListener("click", async ()=>{
+                const message = messageInput.value;
+                const color = colorInput.value;
+                const newMessage = {'message':message, 'color':color}
+                const result = await fetch("/api/chats", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newMessage)
+                })
+                if (!result.ok) {
+                    alert("oh no!")
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+    <div id="theform">
+        <input id="message">
+        <input id="color" type="color">
+        <button id="submit">Send</button>
+    </div>
+    <div id="messages">
+
+    </div>
+    
+</body>
+</html>
