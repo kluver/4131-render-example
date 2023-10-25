@@ -27,41 +27,41 @@ def server(method, url, body, headers):
 
     if method == "POST" and url == "/api/chats":
         if not headers.get("Content-Type") == "application/json":
-            return 'body not json', 400, {"Content-Type":"text/plain"}
+            return 'body not json', 400, {"Content-Type":"text/plain", "Access-Control-Allow-Origin": "*"}
         else:
             try:
                 body = json.loads(body)
                 if "message" not in body and "color" not in body:
-                    return 'message and color properties are required', 400, {"Content-Type":"text/plain"}
+                    return 'message and color properties are required', 400, {"Content-Type":"text/plain", "Access-Control-Allow-Origin": "*"}
                 else:
                     chats.append({"id": id, "message":body["message"], "color":body["color"]})
                     id = id + 1
-                    return "ok", 200, {"Content-Type":"text/plain"}
+                    return "ok", 200, {"Content-Type":"text/plain", "Access-Control-Allow-Origin": "*"}
             except:
-                return 'body not json', 400, {"Content-Type":"text/plain"}
+                return 'body not json', 400, {"Content-Type":"text/plain", "Access-Control-Allow-Origin": "*"}
     elif method == "DELETE" and url == "/api/chats":
         if not headers.get("Content-Type") == "application/json":
-            return 'body not json', 400, {"Content-Type":"text/plain"}
+            return 'body not json', 400, {"Content-Type":"text/plain", "Access-Control-Allow-Origin": "*"}
         else:
             try:
                 body = json.loads(body)
                 if "id" not in body:
-                    return 'id property is required', 400, {"Content-Type":"text/plain"}
+                    return 'id property is required', 400, {"Content-Type":"text/plain", "Access-Control-Allow-Origin": "*"}
                 else:
                     for chat in chats:
                         if chat["id"] == body["id"]:
                             chats.remove(chat)
                             break
-                return 'ok', 200, {"Content-Type":"text/plain"}
+                return 'ok', 200, {"Content-Type":"text/plain", "Access-Control-Allow-Origin": "*"}
             except:
-                return 'body not json', 400, {"Content-Type":"text/plain"}
+                return 'body not json', 400, {"Content-Type":"text/plain", "Access-Control-Allow-Origin": "*"}
     elif method == "GET" and url == "/api/chats":
         
-        return json.dumps(chats), 200, {"Content-Type":"application/json"}
+        return json.dumps(chats), 200, {"Content-Type":"application/json", "Access-Control-Allow-Origin": "*"}
     elif method == "GET" and url=="/":
-        return open("chatroom.html").read(), 200, {"Content-Type":"text/html"}
+        return open("chatroom.html").read(), 200, {"Content-Type":"text/html", "Access-Control-Allow-Origin": "*"}
     else:
-        return "404 not found", 404, {"Content-Type": "text/plain"}
+        return "404 not found", 404, {"Content-Type": "text/plain", "Access-Control-Allow-Origin": "*"}
 
 
 
