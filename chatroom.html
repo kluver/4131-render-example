@@ -53,15 +53,17 @@
                 const message = messageInput.value;
                 const color = colorInput.value;
                 const newMessage = {'message':message, 'color':color}
-                const result = await fetch("/api/chats", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(newMessage)
-                })
-                if (!result.ok) {
-                    alert("oh no!")
+                if (window.yay) {
+                    const result = await fetch("/api/chats", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newMessage)
+                    })
+                    if (!result.ok) {
+                        alert("oh no!")
+                    }
                 }
             })
         })
