@@ -130,6 +130,14 @@ class RequestHandler(BaseHTTPRequestHandler):
             # If your code crashes -- that's our fault 500
             self.c_send_response("The server function crashed.", 500, {'Content-Type':"text/plain"})
             raise
+    def do_OPTIONS(self):
+        self.protocol_version = "HTTP/1.1"
+        self.send_response(200)
+        self.send_header("Access-Control-Allow-Headers", "Content-Type,Authorization")
+        self.send_header("Access-Control-Allow-Methods", "*")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+
 
 
     def do_DELETE(self):
